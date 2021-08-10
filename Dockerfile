@@ -33,5 +33,8 @@ COPY ./web/php.ini /usr/local/etc/php/php.ini
 
 RUN apk add --update supervisor && rm  -rf /tmp/* /var/cache/apk/*
 
+RUN apk add certbot certbot-nginx
+
+
 ENTRYPOINT ["php-entrypoint"]
 CMD ["php-fpm", "-R"]
