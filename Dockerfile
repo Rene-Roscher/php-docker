@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.4-fpm
 
 WORKDIR /var/www
 
@@ -6,18 +6,9 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
-#RUN pecl install redis && docker-php-ext-enable redis
+RUN pecl install redis && docker-php-ext-enable redis
 
 
-ADD redis-4.1.0.tgz  /redis-4.1.0.tgz 
-
-RUN cd / \
-&& tar -xzvf redis-4.1.0.tgz \
-&& cd redis-4.1.0 \
-&& /usr/local/bin/phpize \
-&& ./configure --with-php-config=/usr/local/bin/php-config \
-&& make && make install \
-&& docker-php-ext-enable redis
 
 
 
