@@ -6,6 +6,9 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
+RUN pecl install redis && docker-php-ext-enable redis
+
+
 RUN install-php-extensions \
     bcmath \
     exif \
