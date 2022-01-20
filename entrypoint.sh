@@ -10,10 +10,6 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ]; then
   # Cache everything
   php artisan optimize
   php artisan config:cache
-  php artisan route:cache
-  php artisan view:cache
-  php artisan event:cache
-#  php artisan ziggy:generate
 
 fi
 
