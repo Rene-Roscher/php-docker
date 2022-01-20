@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:7.4-fpm-alpine
 
 WORKDIR /var/www
 
@@ -6,8 +6,15 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
-RUN pecl install redis && docker-php-ext-enable redis
+#RUN pecl install redis && docker-php-ext-enable redis
 
+RUN apk add --no-cache $PHPIZE_DEPS \
+    && apk add --no-cache libstdc++ libzip-dev vim\
+    && apk update \
+    && pecl install redis-5.3.4 \
+    && pecl install zip \
+    && docker-php-ext-enable redis zip \
+    && apk del $PHPIZE_DEPS
 
 
 
