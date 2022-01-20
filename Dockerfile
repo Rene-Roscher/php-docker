@@ -8,6 +8,15 @@ RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
 #RUN pecl install redis && docker-php-ext-enable redis
 
+RUN wget http://pecl.php.net/get/redis-4.1.0.tgz \
+&& tar -xzvf redis-4.1.0.tgz \
+&& cd redis-4.1.0 \
+&& /usr/local/bin/phpize \
+&& ./configure --with-php-config=/usr/local/bin/php-config \
+&& make && make install \
+&& docker-php-ext-enable redis
+
+
 
 RUN install-php-extensions \
     bcmath \
