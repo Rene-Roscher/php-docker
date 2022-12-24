@@ -15,6 +15,8 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ]; then
   php artisan event:cache
 #  php artisan ziggy:generate
 
+  chmod -R gu+w storage/ && chmod -R guo+w storage/ && chmod -R gu+w bootstrap/cache/ && chmod -R guo+w bootstrap/cache/
+
 fi
 
 exec "$@" &
