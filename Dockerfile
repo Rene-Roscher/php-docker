@@ -33,5 +33,8 @@ COPY ./web/php.ini /usr/local/etc/php/php.ini
 
 RUN apk add --update supervisor && rm  -rf /tmp/* /var/cache/apk/*
 
+RUN apk add certbot certbot-nginx
+RUN { crontab -l; echo "0 0 * * * /usr/bin/certbot renew --post-hook \"nginx -s reload\" >/dev/null 2>&1"; } | crontab -
+
 ENTRYPOINT ["php-entrypoint"]
 CMD ["php-fpm", "-R"]
