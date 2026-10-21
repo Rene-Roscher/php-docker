@@ -1,4 +1,7 @@
-FROM php:8.2-fpm-alpine3.16
+# Pinned to the PHP patch release on a supported Alpine. The old php:8.2-fpm-alpine3.16 tag
+# stopped receiving updates with Alpine 3.16, which froze every image built from it at an early
+# 8.2.x. PHP2Shell (CVE-2026-109618 / CVE-2026-109619) is fixed in 8.2.35.
+FROM php:8.2.35-fpm-alpine3.23
 
 WORKDIR /var/www
 
