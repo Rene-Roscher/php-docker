@@ -76,7 +76,16 @@ RUN set -eux; \
 	curl -fsSL -o php.tar.xz.asc "$PHP_ASC_URL"; \
 	export GNUPGHOME="$(mktemp -d)"; \
 	for key in $GPG_KEYS; do \
-		gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
+		gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key" \
+# keyserver unreachable: take exactly this key from the keyring php.net publishes next to the
+# tarballs (same fingerprints, checked by the signature verification below)
+		|| { \
+			keyring="$(mktemp -d)"; \
+			curl -fsSL https://www.php.net/distributions/php-keyring.gpg | GNUPGHOME="$keyring" gpg --batch --import; \
+			GNUPGHOME="$keyring" gpg --batch --export "$key" | gpg --batch --import; \
+			GNUPGHOME="$keyring" gpgconf --kill all; \
+			rm -rf "$keyring"; \
+		}; \
 	done; \
 	gpg --batch --verify php.tar.xz.asc php.tar.xz; \
 	gpgconf --kill all; \
