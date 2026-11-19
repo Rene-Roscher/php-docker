@@ -31,7 +31,7 @@ RUN set -eux; \
 
 FROM ${PHP_IMAGE} AS common
 
-ARG MIN_PHP_VERSION=8.4.27
+ARG MIN_PHP_VERSION=8.4.28
 
 WORKDIR /app
 
@@ -143,7 +143,7 @@ WORKDIR /go/src/app
 
 FROM common AS runner
 
-ARG MIN_PHP_VERSION=8.4.27
+ARG MIN_PHP_VERSION=8.4.28
 
 ENV GODEBUG=cgocheck=0
 
