@@ -18,7 +18,7 @@ FROM ${GO_IMAGE} AS golang-base
 
 FROM golang-base AS source
 
-ARG FRANKENPHP_VERSION=v1.13.1
+ARG FRANKENPHP_VERSION=v1.13.5
 ARG WATCHER_VERSION=0.14.5
 
 RUN set -eux; \
@@ -41,7 +41,9 @@ RUN php -r 'exit(version_compare(PHP_VERSION, getenv("MIN_PHP_VERSION"), ">=") &
 RUN apk add --no-cache \
 	ca-certificates \
 	libcap \
-	mailcap
+	mailcap && \
+	# like upstream 1.13.5: Brotli CVE-2026-111497, until the PHP base image ships the fix
+	apk upgrade --no-cache brotli-libs
 
 RUN set -eux; \
 	mkdir -p \
@@ -82,7 +84,7 @@ LABEL org.opencontainers.image.licenses=MIT
 
 FROM common AS builder
 
-ARG FRANKENPHP_VERSION=v1.13.1
+ARG FRANKENPHP_VERSION=v1.13.5
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 COPY --link --from=golang-base /usr/local/go /usr/local/go
