@@ -18,7 +18,7 @@ FROM ${GO_IMAGE} AS golang-base
 
 FROM golang-base AS source
 
-ARG FRANKENPHP_VERSION=v1.13.1
+ARG FRANKENPHP_VERSION=v1.13.5
 ARG WATCHER_VERSION=0.14.5
 
 RUN set -eux; \
@@ -42,6 +42,8 @@ RUN apt-get update && \
 		mailcap \
 		libcap2-bin \
 	&& \
+	# like upstream 1.13.5: Brotli CVE-2026-111497, until the PHP base image ships the fix
+	apt-get -y --no-install-recommends install --only-upgrade libbrotli1 && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /var/log/apt /var/log/dpkg.log /var/log/alternatives.log /var/cache/ldconfig/aux-cache
 
@@ -83,7 +85,7 @@ LABEL org.opencontainers.image.licenses=MIT
 
 FROM common AS builder
 
-ARG FRANKENPHP_VERSION=v1.13.1
+ARG FRANKENPHP_VERSION=v1.13.5
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 COPY --from=golang-base /usr/local/go /usr/local/go
